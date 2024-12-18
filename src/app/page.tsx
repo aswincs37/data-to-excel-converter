@@ -5,6 +5,7 @@ import * as XLSX from 'xlsx';
 
 const Page = () => {
   const [bulkInput, setBulkInput] = useState('');
+  const [sheetName, setSheetName] = useState('UserData'); // Default sheet name
 
   const handleDownload = () => {
     // Split input into individual entries using "Name :" as the separator
@@ -39,10 +40,10 @@ const Page = () => {
     // Create Excel worksheet and file
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    XLSX.utils.book_append_sheet(workbook, worksheet, sheetName || 'Sheet1');
 
     // Download the Excel file
-    XLSX.writeFile(workbook, 'UserData.xlsx');
+    XLSX.writeFile(workbook, `${sheetName || 'UserData'}.xlsx`);
   };
 
   return (
@@ -72,6 +73,21 @@ const Page = () => {
         value={bulkInput}
         onChange={(e) => setBulkInput(e.target.value)}
       ></textarea>
+       <h4 style={{ textAlign: 'center', color: '#333', marginBottom: '20px' }}>Enter the excel sheet name below !</h4>
+      <input
+        type="text"
+        placeholder="Enter Excel Sheet Name"
+        value={sheetName}
+        onChange={(e) => setSheetName(e.target.value)}
+        style={{
+          width: '100%',
+          marginBottom: '20px',
+          padding: '10px',
+          borderRadius: '5px',
+          border: '1px solid #ccc',
+          fontSize: '16px',
+        }}
+      />
       <button
         onClick={handleDownload}
         style={{
